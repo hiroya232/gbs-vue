@@ -1,6 +1,9 @@
 <template>
   <div>
     <button @click="getTweets">ツイート取得</button>
+    <div class="multi-list" v-for="multi in multiList" :key="multi.multiInfo">
+      {{ multi.multiInfo }}
+    </div>
   </div>
 </template>
 
