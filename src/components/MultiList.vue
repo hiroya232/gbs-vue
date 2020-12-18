@@ -1,8 +1,17 @@
 <template>
   <div>
     <button @click="getTweets">ツイート取得</button>
-    <div class="multi-list" v-for="multi in multiList" :key="multi.multiInfo">
-      {{ multi.multiInfo }}
+    <div
+      class="multi-list"
+      v-for="multi in multiList"
+      :key="multi.multiInfo"
+      v-clipboard:copy="multi.id"
+      v-clipboard:success="onCopy"
+      v-clipboard:error="onError"
+    >
+      {{ multi.lv }}
+      {{ multi.enemy }}
+      {{ multi.id }}
     </div>
   </div>
 </template>
@@ -39,14 +48,11 @@ export default {
 
           //データ加工
           let multiInfos = {
-            multiInfo:
-              splittedTweet[i + 2] +
-              " " +
-              splittedTweet[i + 3] +
-              " " +
-              splittedTweet[i - 1],
+            lv: splittedTweet[i + 2],
+            enemy: splittedTweet[i + 3],
+            id: splittedTweet[i - 1],
           };
-          console.log("multiInfos : ", multiInfos.multiInfo);
+          console.log("multiInfos : ", multiInfos);
 
           self.multiList.push(multiInfos);
           if (self.multiList.length > 10) {
@@ -59,6 +65,15 @@ export default {
         });
       });
     },
+  },
+  setup() {
+    const onCopy = () => {
+      alert("コピーしました");
+    };
+    const onError = () => {
+      alert("コピーに失敗しました");
+    };
+    return { onCopy, onError };
   },
 };
 </script>
