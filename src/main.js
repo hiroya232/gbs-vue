@@ -1,10 +1,11 @@
-import { createApp } from "vue";
+import Vue from "vue";
 import App from "./App.vue";
-import VueClipboard from "vue3-clipboard";
+import VueClipboard from "vue-clipboard2";
 
-createApp(App)
-  .use(VueClipboard, {
-    autoSetContainer: true,
-    appendToBody: true,
-  })
-  .mount("#app");
+Vue.config.productionTip = false;
+
+Vue.use(VueClipboard);
+
+new Vue({
+  render: (h) => h(App),
+}).$mount("#app");

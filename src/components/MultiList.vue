@@ -52,7 +52,7 @@ export default {
             enemy: splittedTweet[i + 3],
             id: splittedTweet[i - 1],
           };
-          console.log("multiInfos : ", multiInfos);
+          // console.log("multiInfos : ", multiInfos);
 
           self.multiList.push(multiInfos);
           if (self.multiList.length > 10) {
@@ -65,15 +65,12 @@ export default {
         });
       });
     },
-  },
-  setup() {
-    const onCopy = () => {
-      alert("コピーしました");
-    };
-    const onError = () => {
-      alert("コピーに失敗しました");
-    };
-    return { onCopy, onError };
+    onCopy: function (id) {
+      console.log("You just copied: " + id.text);
+    },
+    onError: function () {
+      alert("Failed to copy texts");
+    },
   },
 };
 </script>
