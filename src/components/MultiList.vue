@@ -56,10 +56,10 @@ export default {
           console.log("multiInfos : ", multiInfos);
 
           if (multiInfos.enemy == enemy) {
-            self.multiList.push(multiInfos);
+            self.multiList.splice(0, 0, multiInfos);
           }
           if (self.multiList.length > 10) {
-            self.multiList.shift();
+            self.multiList.splice(10, 1);
           }
         });
 
