@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="getTweets">ツイート取得</button>
+    <button @click="getTweets('アーカーシャ')">アーカーシャ</button>
     <div
       class="multi-list"
       v-for="multi in multiList"
@@ -9,8 +9,8 @@
       v-clipboard:success="onCopy"
       v-clipboard:error="onError"
     >
-      {{ multi.lv }}
-      {{ multi.enemy }}
+      <div>{{ multi.enemy }}</div>
+
       {{ multi.id }}
     </div>
   </div>
@@ -26,7 +26,7 @@ export default {
     };
   },
   methods: {
-    getTweets() {
+    getTweets(enemy) {
       let client = new Twitter({
         consumer_key: process.env.VUE_APP_CONSUMER_KEY,
         consumer_secret: process.env.VUE_APP_CONSUMER_SECRET,
@@ -52,9 +52,12 @@ export default {
             enemy: splittedTweet[i + 3],
             id: splittedTweet[i - 1],
           };
-          // console.log("multiInfos : ", multiInfos);
 
-          self.multiList.push(multiInfos);
+          console.log("multiInfos : ", multiInfos);
+
+          if (multiInfos.enemy == enemy) {
+            self.multiList.push(multiInfos);
+          }
           if (self.multiList.length > 10) {
             self.multiList.shift();
           }
@@ -66,7 +69,7 @@ export default {
       });
     },
     onCopy: function (id) {
-      console.log("You just copied: " + id.text);
+      alert("You just copied: " + id.text);
     },
     onError: function () {
       alert("Failed to copy texts");
