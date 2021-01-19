@@ -36,37 +36,41 @@ export default {
 
       //ツイート取得
       let self = this;
-      client.stream("statuses/filter", { track: ":参戦ID" }, function (stream) {
-        stream.on("data", function (tweet) {
-          let splittedTweet = tweet.text.split(/[ \n]/);
-          let i = 0;
-          splittedTweet.forEach(function (value, index) {
-            if (value == ":参戦ID") {
-              i = index;
+      client.stream(
+        "statuses/filter",
+        { track: `:参戦ID ${enemy}` },
+        function (stream) {
+          stream.on("data", function (tweet) {
+            let splittedTweet = tweet.text.split(/[ \n]/);
+            let i = 0;
+            splittedTweet.forEach(function (value, index) {
+              if (value == ":参戦ID") {
+                i = index;
+              }
+            });
+
+            //データ加工
+            let multiInfos = {
+              lv: splittedTweet[i + 2],
+              enemy: splittedTweet[i + 3],
+              id: splittedTweet[i - 1],
+            };
+
+            console.log("multiInfos : ", multiInfos);
+
+            if (multiInfos.enemy == enemy) {
+              self.multiList.splice(0, 0, multiInfos);
+            }
+            if (self.multiList.length > 10) {
+              self.multiList.splice(10, 1);
             }
           });
 
-          //データ加工
-          let multiInfos = {
-            lv: splittedTweet[i + 2],
-            enemy: splittedTweet[i + 3],
-            id: splittedTweet[i - 1],
-          };
-
-          console.log("multiInfos : ", multiInfos);
-
-          if (multiInfos.enemy == enemy) {
-            self.multiList.splice(0, 0, multiInfos);
-          }
-          if (self.multiList.length > 10) {
-            self.multiList.splice(10, 1);
-          }
-        });
-
-        stream.on("error", function (error) {
-          console.log(error);
-        });
-      });
+          stream.on("error", function (error) {
+            console.log(error);
+          });
+        }
+      );
     },
     onCopy: function (id) {
       alert("You just copied: " + id.text);
