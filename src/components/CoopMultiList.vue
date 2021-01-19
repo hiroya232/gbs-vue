@@ -1,14 +1,14 @@
 <template>
   <div>
-    <GetMultiTweet
+    <GetTweet
       multiType="共闘マルチ"
       search-keyword="［グラブル］マルチバトル参加者募集！"
-    ></GetMultiTweet>
+    ></GetTweet>
   </div>
 </template>
 
 <script>
-import GetMultiTweet from "./GetMultiTweet.vue";
+import GetTweet from "./GetTweet.vue";
 
 export default {
   data: function () {
@@ -17,7 +17,7 @@ export default {
     };
   },
   components: {
-    GetMultiTweet,
+    GetTweet,
   },
 };
 </script>
