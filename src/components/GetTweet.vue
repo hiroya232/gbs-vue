@@ -1,15 +1,15 @@
 <template>
   <div>
-    <button @click="getTweets(searchKeyword)">{{ multiType }}</button>
+    <button @click="getTweets(searchKeyword, enemy)">{{ multiType }}</button>
     <div
       class="coop-multi-list"
-      v-for="coopMulti in coopMultiList"
-      :key="coopMulti.id"
-      v-clipboard:copy="coopMulti.roomId"
+      v-for="MultiInfo in MultiList"
+      :key="MultiInfo.id"
+      v-clipboard:copy="MultiInfo.roomId"
       v-clipboard:success="onCopy"
       v-clipboard:error="onError"
     >
-      <div>{{ coopMulti.info }} {{ coopMulti.roomId }}</div>
+      <div>{{ MultiInfo.enemyInfo }} {{ MultiInfo.roomId }}</div>
     </div>
   </div>
 </template>
@@ -20,13 +20,15 @@ import Twitter from "twitter";
 export default {
   data: function () {
     return {
-      coopMultiList: [],
+      MultiList: [],
     };
   },
-  props: ["multiType", "searchKeyword"],
+  props: ["multiType", "searchKeyword", "enemy"],
   methods: {
-    getTweets(searchKeyword) {
+    getTweets(searchKeyword, ...enemy) {
       console.log("検索開始");
+      console.log(searchKeyword);
+      console.log(enemy);
       let client = new Twitter({
         consumer_key: process.env.VUE_APP_CONSUMER_KEY,
         consumer_secret: process.env.VUE_APP_CONSUMER_SECRET,
@@ -39,40 +41,46 @@ export default {
       let id = 0;
       client.stream(
         "statuses/filter",
-        { track: searchKeyword },
+        { track: `${searchKeyword} + ${enemy}` },
         function (stream) {
           stream.on("data", function (tweet) {
             let splittedTweet = tweet.text.split(/[ \n]/);
-            let coopInfo = splittedTweet.slice(-1)[0];
-            let roomId = splittedTweet.slice(0, 1)[0].split("：")[0];
-            console.log("ツイート取得");
+            console.log(splittedTweet);
+            let roomId = splittedTweet.slice(0, 2)[0].split("：")[0];
+            console.log(roomId);
 
             //ルームidが同じ時は無視
             if (
-              self.coopMultiList.map((obj) => obj.roomId).includes(roomId) ||
-              self.coopMultiList === null
+              self.MultiList.map((obj) => obj.roomId).includes(roomId) ||
+              self.MultiList === null
             ) {
               return;
             }
 
-            console.log(splittedTweet);
-            console.log(coopInfo);
-            console.log(roomId);
+            let enemyInfo;
+            let MultiInfos;
+            if (searchKeyword === ":参戦ID") {
+              enemyInfo = splittedTweet.slice(-2)[0];
+            } else {
+              enemyInfo = splittedTweet.slice(-1)[0];
+            }
+            console.log(enemyInfo);
 
             //データ加工
-            let coopMultiInfos = {
+            MultiInfos = {
               id: id,
               roomId: roomId,
-              info: coopInfo,
+              enemyInfo: enemyInfo,
             };
+
             id++;
 
-            self.coopMultiList.splice(0, 0, coopMultiInfos);
-            console.log(self.coopMultiList);
+            self.MultiList.splice(0, 0, MultiInfos);
+            console.log(self.MultiList);
 
             //10件まで表示
-            if (self.coopMultiList.length > 10) {
-              self.coopMultiList.splice(10, 1);
+            if (self.MultiList.length > 10) {
+              self.MultiList.splice(10, 1);
             }
           });
 
