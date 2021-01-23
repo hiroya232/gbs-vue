@@ -3,7 +3,7 @@
     <GetTweet
       multiType="共闘マルチ"
       search-keyword="［グラブル］マルチバトル参加者募集！"
-      enemy="アルバハ"
+      enemy=""
     ></GetTweet>
   </div>
 </template>

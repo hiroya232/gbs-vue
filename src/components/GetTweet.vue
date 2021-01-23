@@ -25,7 +25,7 @@ export default {
   },
   props: ["multiType", "searchKeyword", "enemy"],
   methods: {
-    getTweets(searchKeyword, ...enemy) {
+    getTweets(searchKeyword, enemy) {
       console.log("検索開始");
       console.log(searchKeyword);
       console.log(enemy);
@@ -46,7 +46,19 @@ export default {
           stream.on("data", function (tweet) {
             let splittedTweet = tweet.text.split(/[ \n]/);
             console.log(splittedTweet);
-            let roomId = splittedTweet.slice(0, 2)[0].split("：")[0];
+
+            let idIdx = splittedTweet.indexOf(searchKeyword);
+            let roomId;
+            let enemyInfo;
+            if (searchKeyword === "参加者募集！") {
+              //救援マルチの場合
+              roomId = splittedTweet[idIdx - 2];
+              enemyInfo = splittedTweet.slice(-2)[0];
+            } else {
+              //共闘マルチの場合
+              roomId = splittedTweet[idIdx - 1].split("：")[0];
+              enemyInfo = splittedTweet.slice(-1)[0];
+            }
             console.log(roomId);
 
             //ルームidが同じ時は無視
@@ -56,18 +68,10 @@ export default {
             ) {
               return;
             }
-
-            let enemyInfo;
-            let MultiInfos;
-            if (searchKeyword === ":参戦ID") {
-              enemyInfo = splittedTweet.slice(-2)[0];
-            } else {
-              enemyInfo = splittedTweet.slice(-1)[0];
-            }
             console.log(enemyInfo);
 
             //データ加工
-            MultiInfos = {
+            let MultiInfos = {
               id: id,
               roomId: roomId,
               enemyInfo: enemyInfo,
