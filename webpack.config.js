@@ -1,5 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
 
 /*
  * SplitChunksPlugin is enabled by default and replaced
@@ -22,43 +22,43 @@ const webpack = require('webpack');
  *
  */
 
-const TerserPlugin = require('terser-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-	mode: 'development',
-	entry: './src/main.js',
+  mode: "development",
+  entry: "./src/main.js",
 
-	output: {
-		path: path.resolve(__dirname, './docs')
-	},
+  output: {
+    path: path.resolve(__dirname, "./docs"),
+  },
 
-	plugins: [new webpack.ProgressPlugin()],
+  plugins: [new webpack.ProgressPlugin()],
 
-	module: {
-		rules: [
-			{
-				test: /\.(js|vue)$/,
-				include: [path.resolve(__dirname, 'src')],
-				loader: 'babel-loader'
-			}
-		]
-	},
+  module: {
+    rules: [
+      {
+        test: /\.(js|vue)$/,
+        include: [path.resolve(__dirname, "src")],
+        loader: "babel-loader",
+      },
+    ],
+  },
 
-	optimization: {
-		minimizer: [new TerserPlugin()],
+  optimization: {
+    minimizer: [new TerserPlugin()],
 
-		splitChunks: {
-			cacheGroups: {
-				vendors: {
-					priority: -10,
-					test: /[\\/]node_modules[\\/]/
-				}
-			},
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          priority: -10,
+          test: /[\\/]node_modules[\\/]/,
+        },
+      },
 
-			chunks: 'async',
-			minChunks: 1,
-			minSize: 30000,
-			name: false
-		}
-	}
+      chunks: "async",
+      minChunks: 1,
+      minSize: 30000,
+      name: false,
+    },
+  },
 };
