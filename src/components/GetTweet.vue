@@ -44,7 +44,8 @@ export default {
         { track: `${searchKeyword} + ${enemy}` },
         function (stream) {
           stream.on("data", function (tweet) {
-            let splittedTweet = tweet.text.split(/[ \n]/);
+            console.log(tweet);
+            let splittedTweet = tweet.text.split("\n");
             console.log(splittedTweet);
 
             let idIdx = splittedTweet.indexOf(searchKeyword);
