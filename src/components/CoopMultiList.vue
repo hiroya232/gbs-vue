@@ -1,9 +1,9 @@
 <template>
   <div>
     <GetTweet
-      multiType="救援マルチ"
-      search-keyword="参加者募集！"
-      enemy="アーカーシャ"
+      multiType="共闘マルチ"
+      search-keyword="［グラブル］マルチバトル参加者募集！"
+      enemy=""
     ></GetTweet>
   </div>
 </template>
